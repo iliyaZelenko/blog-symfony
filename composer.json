@@ -80,8 +80,8 @@
         "serve": "@php ./bin/console server:run 8080",
         "dump": "@php ./bin/console server:dump",
         "dump-html": "@php ./bin/console server:dump --format=html > dump.html",
-        "cs-check": "@php ./bin/php-cs-fixer-v2.phar fix --dry-run --verbose",
-        "cs-fix": "@php ./bin/php-cs-fixer-v2.phar fix --verbose",
+        "cs-check": "@php ./vendor/bin/php-cs-fixer fix --dry-run --verbose",
+        "cs-fix": "@php ./vendor/bin/php-cs-fixer fix --verbose",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"

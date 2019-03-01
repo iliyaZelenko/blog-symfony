@@ -12,7 +12,7 @@
 
 
 
-# Эта команда выдает ошибку:
+# Эта команда выдает ошибку что команды не существует, похоже она устарела:
 # this checks that the application doesn't use dependencies with known security vulnerabilities
 # ./bin/console security:check
 
