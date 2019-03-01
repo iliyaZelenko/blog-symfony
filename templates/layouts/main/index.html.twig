@@ -1,0 +1,30 @@
+{% extends 'layouts/main/base_html_page.html.twig' %}
+
+{% block body %}
+  <header>
+    {% include 'layouts/main/parts/header.html.twig' %}
+  </header>
+
+  <main style="flex: 1;">
+    <b-container class="pt-5">
+      <div>
+        {% include 'layouts/main/parts/messages.html.twig' %}
+      </div>
+
+      {% block content %}{% endblock %}
+    </b-container>
+  </main>
+
+  <footer class="py-3 text-center text-white">
+    Blog by
+
+    <a rel="author" href="https://www.facebook.com/ZelenkoPro">
+      <b>
+        Ilya Zelenko
+      </b>
+    </a>
+    .
+
+    Powered by Symfony 4.2
+  </footer>
+{% endblock %}

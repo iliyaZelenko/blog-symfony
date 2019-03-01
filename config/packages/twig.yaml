@@ -1,0 +1,16 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+
+    form_themes: ['bootstrap_4_layout.html.twig']
+    # поставил кастомный абработчик ошибок
+    exception_controller: App\Controllers\ExceptionController::showAction
+    globals:
+        flag:
+            en: 'https://www.countryflags.io/us/shiny/32.png'
+            ru: 'https://www.countryflags.io/ru/shiny/32.png'
+
+#        # TODO хочу получить значение из другого конфига чтобы не повторятся
+#        # что-то типа: '%config(packages.algolia_search.algolia_search.prefix)%'
+#        app.algolia_index_prefix: '%env(ALGOLIA_INDEX_PREFIX)%_'

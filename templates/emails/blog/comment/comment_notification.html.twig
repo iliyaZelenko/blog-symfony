@@ -1,0 +1,15 @@
+{% extends 'layouts/emails/main/base.html.twig' %}
+
+{% block title %}
+  {{ title | raw }}
+{% endblock %}
+
+{% block body %}
+  {{ text | raw }}
+
+  {% include 'emails/parts/button.html.twig' with { btnURL: postLink, btnText: 'Open this post' } only  %}
+
+  If you’re having trouble clicking the "Open this post" button, copy and paste the URL below into your web browser:
+
+  {% include 'emails/parts/link.html.twig' with { link: postLink } only  %}
+{% endblock %}

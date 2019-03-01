@@ -1,0 +1,100 @@
+{% extends 'layouts/main/index.html.twig' %}
+
+{% block title %}
+  Sign In
+{% endblock %}
+
+{% block content %}
+  <h2 class="text-center">
+    Sign In
+  </h2>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error.messageKey | trans(error.messageData, 'security') }}</div>
+  {% endif %}
+
+  <b-row align-h="center">
+    <b-col cols="12" lg="4">
+      <br>
+      <a href="/connect/auth0">
+        <b-button size="sm" variant="primary">
+          Enter with <b>Auth0</b>
+        </b-button>
+      </a>
+
+      <hr>
+
+      <b-form method="post">
+        <input
+          type="hidden"
+          name="_csrf_token"
+          value="{{ csrf_token('authenticate') }}"
+        >
+
+        <b-form-group
+          id="exampleInputGroup1"
+          label="Username:"
+          label-for="inputUsername"
+        >
+          <b-form-input
+            value="{{ last_username }}"
+            id="inputUsername"
+            type="text"
+            name="username"
+            placeholder="Enter username"
+            autocomplete="username"
+            required
+            autofocus
+          >
+          </b-form-input>
+        </b-form-group>
+
+        <b-form-group
+          id="exampleInputGroup2"
+          label="Password:"
+          label-for="inputPassword"
+        >
+          <b-form-input
+            id="inputPassword"
+            type="password"
+            name="password"
+            placeholder="Enter password"
+            autocomplete="current-password"
+            required
+          >
+          </b-form-input>
+        </b-form-group>
+
+        {#
+            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+            See https://symfony.com/doc/current/security/remember_me.html
+
+            <b-form-checkbox name="_remember_me">
+              Remember me
+            </b-form-checkbox>
+
+            <div class="checkbox mb-3">
+                <label>
+                    <input type="checkbox" name="_remember_me"> Remember me
+                </label>
+            </div>
+        #}
+
+        <b-button
+          type="reset"
+          size="sm"
+          variant="danger"
+        >
+          Reset
+        </b-button>
+        <b-button
+          type="submit"
+          variant="primary"
+          class="float-right"
+        >
+          Sign In
+        </b-button>
+      </b-form>
+    </b-col>
+  </b-row>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'layouts/main/index.html.twig' %}
+
+{% block title %}
+  Error {{ status_code }}
+{% endblock %}
+
+{% block content %}
+  <div style="display: flex; flex-direction: column; height: 80vh;">
+    {% block error_body %}{% endblock %}
+
+    {% include 'layouts/error/parts/image.html.twig' %}
+  </div>
+{% endblock %}

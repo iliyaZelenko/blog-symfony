@@ -1,0 +1,70 @@
+type Query {
+    hello: String
+    car: String
+    player(id: ID!): String!
+    paginatedPosts(page: Int!, perPage: Int = 8, order: LinkOrderByInput = id_ASC): PostsPaginated! # [Post!]!
+}
+
+type Mutation {
+    createPost(input: CreatePostMutationInput!): CreatePostMutationResult!
+#    errors: [Error]!
+}
+
+type Error {
+    key: String!
+    message: String!
+}
+
+input CreatePostMutationInput {
+    title: String!
+    text: String!
+}
+
+type CreatePostMutationResult {
+    post: Post!
+    errors: [Error]!
+}
+
+#type PageInfo {
+#    total: Int
+#}
+
+type MyPageInfo {
+    page: Int
+    pagesCount: Int
+    totalItems: Int
+    perPage: Int
+    hasNextPage: Boolean
+}
+
+type PostsPaginated {
+    posts: [Post!]!
+    pageInfo: MyPageInfo
+}
+
+#totalCount
+type Post {
+    id: ID!
+    title: String!
+    text: String!
+    comments: [Comment!]!
+    pageInfo: PageInfo!
+}
+
+type Comment {
+    text: String
+    author: String
+}
+
+enum LinkOrderByInput {
+    id_ASC
+    id_DESC
+#    description_ASC
+#    description_DESC
+#    url_ASC
+#    url_DESC
+#    updatedAt_ASC
+#    updatedAt_DESC
+#    createdAt_ASC
+#    createdAt_DESC
+}

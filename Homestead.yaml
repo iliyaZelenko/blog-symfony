@@ -1,0 +1,23 @@
+ip: 192.168.10.10
+memory: 2048
+cpus: 1
+provider: virtualbox
+authorize: ~/.ssh/id_rsa.pub
+keys:
+    - ~/.ssh/id_rsa
+folders:
+    -
+        map: 'D:\Projects\geekhub_HM\blog\symfony'
+        to: /home/vagrant/code
+sites:
+    -
+        map: blog-symfony.test
+        to: /home/vagrant/code/public
+databases:
+    - blog-symfony
+name: blog-symfony
+hostname: blog-symfony
+
+#ports:
+#- send: 8443
+#  to: 8443

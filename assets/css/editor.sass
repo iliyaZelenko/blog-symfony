@@ -1,0 +1,45 @@
+$contentPadding: 20px
+$menubarRadius: 10px
+
+.editor p.is-empty:first-child::before
+    content: attr(data-empty-text) !important
+    float: left !important
+    color: #aaa !important
+    pointer-events: none !important
+    height: 0 !important
+    font-style: italic !important
+
+.editor
+  .menubar
+    background: #6c757d
+    border-top-left-radius: $menubarRadius
+    border-top-right-radius: $menubarRadius
+
+  .editor__content
+    height: 100%
+
+    > div.ProseMirror
+      height: 100%
+      padding: $contentPadding
+      outline: none
+
+  .card
+    border-top-left-radius: 0
+    border-top-right-radius: 0
+
+
+.editor, .editor-view-content
+  blockquote
+    border-left: .25em solid #dfe2e5
+    color: #6a737d
+    padding: 0 1em
+
+  code
+    // border: 1px solid #7DA0B1
+    display: block
+    border-radius: 10px
+    padding: 16px
+    background: #f6f8fa
+
+.editor-view-content
+  overflow: auto

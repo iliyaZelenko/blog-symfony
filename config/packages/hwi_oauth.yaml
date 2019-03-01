@@ -1,0 +1,22 @@
+hwi_oauth:
+    # list of names of the firewalls in which this bundle is active, this setting MUST be set
+    firewall_names: [main]
+
+    # https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/2-configuring_resource_owners.md
+    resource_owners:
+#        facebook:
+#            type:                facebook
+#            client_id:           '%env(FB_ID)%'
+#            client_secret:       '%env(FB_SECRET)%'
+#            scope:               "email"
+#            options:
+#                display: popup
+#                csrf: true
+        auth0:
+            type:                auth0 # oauth2
+            base_url:            https://iz-blog.eu.auth0.com
+            client_id:           1hPSvihNnz7fSZxH6z4fl8dfXMKBmrEF
+            client_secret:       2S3Hj02kCE7kOIHG-nD--V2wOT2Eg8ur8ccJMMflQY9B4KeBmiF5OJA4hCa1ZoSU
+            redirect_uri:        http://localhost:8000/auth0/callback
+            scope: "openid profile"
+

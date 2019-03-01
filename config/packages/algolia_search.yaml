@@ -1,0 +1,11 @@
+# All available configuration can be found here:
+# https://www.algolia.com/doc/api-client/symfony/configuration/
+algolia_search:
+    prefix: '%env(ALGOLIA_INDEX_PREFIX)%_' # Use a prefix for index names based en env var
+    doctrineSubscribedEvents: ['postPersist', 'postUpdate', 'preRemove']
+    indices:
+        - name: posts
+          class: App\Entity\Post
+
+        - name: comments
+          class: App\Entity\Comment

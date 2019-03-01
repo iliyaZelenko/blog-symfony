@@ -1,0 +1,13 @@
+{% extends 'layouts/error/index.html.twig' %}
+
+{% block title %}
+  Error {{ status_code }}
+{% endblock %}
+
+{% block error_body %}
+  <h2>The server returned a "<b>{{ status_code }}</b> {{ status_text }}".</h2>
+
+  <a href="{{ path('index') }}" class="mb-2">
+    Return to the homepage.
+  </a>
+{% endblock %}

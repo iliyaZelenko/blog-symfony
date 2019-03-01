@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>
+    {% block title %}
+      Blog
+    {% endblock %}
+  </title>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+  {{ encore_entry_link_tags('app') }}
+  {% block stylesheets %}{% endblock %}
+</head>
+<body>
+  <div id="app">
+    {% block body %}{% endblock %}
+  </div>
+
+  <script>
+    // создает объект из ассоциативного масства
+    const data = {
+      // key: value
+      {% for key, value in vue_data | default([]) %}
+        {{ key }}: getParsed({{ value | raw }}),
+      {% endfor %}
+    }
+    const methods = {
+      // funcName (params) {
+      //   body
+      // }
+      {% for key, value in vue_methods | default([]) %}
+        {{ key }} ({{ value.params | default([]) | join(',') }}) {
+          {{ value.body }}
+        },
+      {% endfor %}
+    }
+
+    // данные от сюда сливаются с Vue
+    window.vueExtend = {
+      data,
+      methods,
+      created () {
+        // console.log('hi')
+      }
+    }
+
+    function getParsed (val) {
+      if (typeof val !== 'string') {
+        return val
+      }
+
+      try {
+        return JSON.parse(val)
+      } catch (e) {
+        return val
+      }
+    }
+  </script>
+  {% block javascripts %}{% endblock %}
+  {{ encore_entry_script_tags('app') }}
+</body>
+</html>

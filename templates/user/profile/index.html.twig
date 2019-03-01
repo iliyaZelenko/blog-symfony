@@ -1,0 +1,36 @@
+{% extends 'layouts/main/index.html.twig' %}
+
+{% block title %}
+  Profile page
+{% endblock %}
+
+{% block content %}
+  <b-row align-h="center">
+    <b-col cols="12" lg="4">
+      <b-list-group>
+        <b-list-group-item>
+          <b>Username:</b>
+          {{ app.user.username }}
+        </b-list-group-item>
+        <b-list-group-item>
+          <b>Email:</b>
+          {{ app.user.email }}
+        </b-list-group-item>
+        <b-list-group-item>
+          <b-button
+            href="{{ path('app_logout') }}"
+            variant="danger"
+          >
+            Log out
+          </b-button>
+        </b-list-group-item>
+      </b-list-group>
+    </b-col>
+  </b-row>
+
+  <h3 class="text-center mt-3">
+    <a href="{{ path('profile_posts') }}">
+      My posts
+    </a>
+  </h3>
+{% endblock %}

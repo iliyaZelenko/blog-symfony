@@ -1,0 +1,48 @@
+{% extends 'layouts/main/index.html.twig' %}
+
+{% block title %}
+  Sign Up
+{% endblock %}
+
+{% block content %}
+  <h2 class="text-center mb-3">
+    Sign Up
+  </h2>
+
+  <b-row align-h="center">
+    <b-col cols="12" lg="4">
+      {{ form_start(registrationForm) }}
+
+      {# render any "global" errors not associated to any form field #}
+      {{ form_errors(registrationForm) }}
+
+      {{ form_row(registrationForm.username, { autocomplete: 'username'}) }}
+      {{ form_row(registrationForm.email, { autocomplete: 'email'}) }}
+      {{ form_row(registrationForm.plainPassword, { autocomplete: 'new-password'}) }}
+
+      <div id="recaptcha" class="d-flex justify-content-center mt-2 mb-3"></div>
+
+      <b-button
+        type="submit"
+        variant="primary"
+        class="float-right"
+      >
+        Sign Up
+      </b-button>
+
+      {{ form_end(registrationForm) }}
+    </b-col>
+  </b-row>
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  <script src="https://www.google.com/recaptcha/api.js?onload=onLoadCallback&render=explicit" async defer></script>
+  <script>
+    function onLoadCallback () {
+      grecaptcha.render('recaptcha', {
+        'sitekey' : '6LdVYIwUAAAAACiUo1k6mJm2iv2CF6coKu2ITPM_'
+      })
+    }
+  </script>
+{% endblock %}

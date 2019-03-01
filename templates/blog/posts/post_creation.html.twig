@@ -1,0 +1,30 @@
+{% extends 'layouts/main/index.html.twig' %}
+
+{% block title %}Post creation{% endblock %}
+
+{% block content %}
+  <b-form
+    action="{{ url('post_creation') }}"
+    method="post"
+  >
+    <b-form-group
+      label="Title:"
+      label-for="input-message"
+      description="Please, provide a good title."
+    >
+      <input type="hidden" name="token" value="{{ csrf_token('create-post') }}" />
+
+      <b-form-input
+        id="input-message"
+        type="text"
+        placeholder="Enter text"
+        required
+      >
+      </b-form-input>
+    </b-form-group>
+
+    <b-button type="submit" variant="primary">
+      Submit
+    </b-button>
+  </b-form>
+{% endblock %}

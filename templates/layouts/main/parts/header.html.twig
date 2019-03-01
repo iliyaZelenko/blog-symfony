@@ -1,0 +1,99 @@
+<b-navbar toggleable="md" type="dark" variant="info">
+
+  <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+
+  <b-navbar-brand href="/">
+    {% trans %}
+      Blog
+    {% endtrans %}
+  </b-navbar-brand>
+
+  <b-collapse is-nav id="nav_collapse">
+
+    <b-navbar-nav>
+      <b-nav-item href="/">
+        Home
+      </b-nav-item>
+      <b-nav-item href="{{ path('blog') }}">
+        Blog
+      </b-nav-item>
+    </b-navbar-nav>
+
+    <!-- Right aligned nav items -->
+    <b-navbar-nav class="ml-auto">
+      <b-btn
+        to="{{ path('search') }}"
+        variant="primary"
+        class="mr-3"
+      >
+        Search
+      </b-btn>
+
+      {% if app.request.locale is same as ('en') %}
+        <img src="{{ flag.en }}">
+      {% elseif app.request.locale is same as ('ru') %}
+        <img src="{{ flag.ru }}">
+      {% endif %}
+
+      <b-nav-item-dropdown text="Lang ({{ app.request.locale }})" right>
+        {#
+        TODO Хотел генерировать роут на текущий маршрут, но только с измененной локалью, типа:
+        {{ path(app.request.get('_route'), { _locale: 'ru'   Но тут нужны парамтры текущего роута     }) }}
+        #}
+        <b-dropdown-item href="{{ path('index', { _locale: 'en' }) }}">
+          {% if app.request.locale is same as ('en') %}
+            <b>
+              EN
+            </b>
+          {% else %}
+            EN
+          {% endif %}
+          <img src="{{ flag.en }}">
+        </b-dropdown-item>
+        <b-dropdown-item href="{{ path('index', { _locale: 'ru' }) }}">
+          {% if app.request.locale is same as ('ru') %}
+            <b>
+              RU
+            </b>
+          {% else %}
+            RU
+          {% endif %}
+          <img src="{{ flag.ru }}">
+        </b-dropdown-item>
+      </b-nav-item-dropdown>
+
+      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <b-nav-item-dropdown right>
+          <template slot="button-content">
+            <em>👤 {{ app.user.username }}</em>
+          </template>
+          <b-dropdown-item href="{{ path('profile') }}">
+            Profile
+          </b-dropdown-item>
+
+
+          <b-dropdown-item @click="$refs.logoutForm.submit()">
+            Logout
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
+      {% else %}
+        <b-nav-item href="{{ path('app_login') }}">
+          Sign In
+        </b-nav-item>
+        <b-nav-item href="{{ path('app_register') }}">
+          Sign Up
+        </b-nav-item>
+      {% endif %}
+    </b-navbar-nav>
+
+  </b-collapse>
+</b-navbar>
+
+<form
+  ref="logoutForm"
+  action="{{ path('app_logout') }}"
+  method="POST"
+  class="d-none"
+>
+  <input type="hidden" name="token" value="{{ csrf_token('user_logout') }}">
+</form>

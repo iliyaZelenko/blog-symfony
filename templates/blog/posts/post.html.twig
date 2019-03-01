@@ -1,0 +1,83 @@
+{% extends 'layouts/main/index.html.twig' %}
+
+{% block title %}
+  Post "{{ post.title }}"
+{% endblock %}
+
+{% block content %}
+  <h1>{{ post.title }}</h1>
+
+  <div class="d-flex">
+    <div>
+      By
+      <b>
+        {{ post.author.username }}
+      </b>
+
+      {{ blogDate(post.createdAt) }}
+    </div>
+    <div class="ml-auto">
+      {% include 'blog/posts/parts/rating_button.html.twig' with { ratingPost: post, votingActivate: true } only %}
+    </div>
+  </div>
+
+  {# Теги #}
+  <div>
+    {% for tag in post.tags %}
+      <b-badge variant="secondary">
+        {{ tag.name }}
+      </b-badge>
+    {% endfor %}
+  </div>
+
+  <div>
+    {{ post.text | raw }}
+  </div>
+
+  <hr>
+
+  {#{% if is_granted('IS_AUTHENTICATED_FULLY') %}#}
+    {#{{ form(form) }}#}
+  {#{% endif %}#}
+
+  <h4 class="mb-4">
+    Comments
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+      <b-btn
+        v-b-toggle.collapse-create-comment
+        variant="primary"
+        class="ml-4"
+      >
+        ${ showFormAddRootComment ? 'Hide form' : 'Add comment' }
+      </b-btn>
+    {% endif %}
+  </h4>
+
+  {% if is_granted('IS_AUTHENTICATED_FULLY') == false %}
+    <b-alert show>
+      You need to authenticate to leave a comment.
+    </b-alert>
+  {% endif %}
+
+  <b-collapse id="collapse-create-comment">
+    <create-comment
+      api-endpoint="{{ path('post_create_comment', { slug: post.slug, id: post.id }) }}"
+    ></create-comment>
+  </b-collapse>
+
+  {% include 'blog/posts/parts/comments_tree.html.twig' with { commentsPost: post, comments: rootComments } only %}
+
+  <div class="d-flex justify-content-center mt-4">
+    {{ knp_pagination_render(rootComments) }}
+  </div>
+
+  {#{% for comment in post.getComments() %}#}
+    {#<div>#}
+      {#{{ comment.text }}#}
+    {#</div>#}
+  {#{% endfor %}#}
+
+  {% include 'blog/posts/parts/rating_popover.html.twig' with { ratingPost: post } only %}
+
+{% endblock %}

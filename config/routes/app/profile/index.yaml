@@ -1,0 +1,14 @@
+# Auth
+profile:
+    path: /
+    controller: App\Controllers\ProfileController::index
+    methods: [GET]
+
+profile_posts:
+    path: /posts/{page}
+    controller: App\Controllers\ProfileController::posts
+    requirements:
+        page: '\d+'
+    defaults:
+        page: 1
+    methods: [GET]

@@ -1,0 +1,31 @@
+<script>
+  const params = new URLSearchParams(window.location.search)
+  const paramName = 'perPage'
+  const perPageDefault = {{ perPage }}
+  const perPage = +params.get(paramName) || perPageDefault
+  const perPageItems = [
+    { value: 3, text: '3 items' },
+    { value: 9, text: '9 items' },
+    { value: 15, text: '15 items' },
+    { value: 24, text: '24 items' }
+  ]
+
+  // если нет таких элементов, то добавляет
+  if (!perPageItems.find(i => i.value === perPage)) {
+    perPageItems.unshift({
+      value: perPage, text: perPage + ' items'
+    })
+  }
+
+  window.vueExtend.data.perPage = perPage
+  window.vueExtend.data.perPageItems = perPageItems
+  window.vueExtend.methods.paginationChangePage = (page, perPageLocal = perPage) => {
+    const basePath = window.vueExtend.data.basePathURL + page
+    let postFix = ''
+
+    if (perPageLocal) {
+      postFix = `?${paramName}=` + perPageLocal
+    }
+    location.href = basePath + postFix
+  }
+</script>

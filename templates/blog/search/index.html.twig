@@ -1,0 +1,15 @@
+{% extends 'layouts/main/index.html.twig' %}
+
+{% block title %}
+  Search
+{% endblock %}
+
+{% block content %}
+  <search
+    index="{{ appAlgoliaGetIndexName('posts') }}"
+  />
+
+  <h3>Results</h3>
+
+  {#{{ dump(posts) }}#}
+{% endblock %}

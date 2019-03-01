@@ -1,0 +1,87 @@
+<div class="comments-wrap">
+  {% for comment in comments %}
+    <div class="comment">
+      {#<b-card class="comments ml-4 mb-2">#}
+
+      <div class="comment__self-content">
+        By
+        <b>
+          {{ comment.author.username }}
+        </b>
+
+        {{ blogDate(comment.createdAt) }}
+
+        <div class="comment__text editor-view-content">
+          {{ comment.text | raw }}
+        </div>
+
+        {% if is_granted('IS_AUTHENTICATED_FULLY') and comment.author.id is same as(app.user.id) %}
+          <b-btn
+            size="sm"
+            variant="primary"
+          >
+            Edit
+          </b-btn>
+        {% endif %}
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+          <b-btn
+            v-b-toggle.collapse-for-comment{{ comment.id }}
+            size="sm"
+            variant="secondary"
+          >
+            Reply
+          </b-btn>
+          <b-collapse id="collapse-for-comment{{ comment.id }}" class="mt-2">
+            <create-comment
+              parent-comment-id="{{ comment.id }}"
+              api-endpoint="{{ path('post_create_comment', { slug: commentsPost.slug, id: commentsPost.id }) }}"
+            ></create-comment>
+            {#
+            <b-form
+              @submit="onSubmit"
+              action="{{ url('post', { slug: commentsPost.slug, id: commentsPost.id}) }}"
+              method="post"
+            >
+              <b-form-group
+                label="Email address:"
+                label-for="comment-{{ comment.id }}-input-message"
+                description="Please, provide a good message."
+              >
+                <input type="hidden" name="token" value="{{ csrf_token('create-comment-item') }}" />
+
+                <b-form-input
+                  v-model="formComment.text"
+                  id="comment-{{ comment.id }}-input-message"
+                  type="text"
+                  placeholder="Enter text"
+                  required
+                >
+                </b-form-input>
+              </b-form-group>
+
+              <b-button type="submit" variant="primary">
+                Submit
+              </b-button>
+            </b-form>
+            #}
+          </b-collapse>
+        {% endif %}
+      </div>
+
+
+      {#<hr>#}
+
+      {% set childrenComments = comment.getChildrenComments() %}
+
+      {% if childrenComments | length > 0 %}
+        {# не уверен что стоит так делать, комменты же имеют одинаковый пост,
+        не хотел писать commentsPost: commentsPost как ты мне замечание сделал с comments: comments #}
+        {% set childrenCommentsPost = commentsPost %}
+
+        {% include 'blog/posts/parts/comments_tree.html.twig' with { commentsPost: childrenCommentsPost, comments: childrenComments } only %}
+      {% endif %}
+
+      {#</b-card>#}
+    </div>
+  {% endfor %}
+</div>

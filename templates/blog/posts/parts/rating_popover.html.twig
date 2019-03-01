@@ -1,0 +1,30 @@
+{# Этот элемент зависит от blog/posts/parts/rating_popover.html.twig #}
+
+{% set limit = 6 %}
+
+<b-popover
+  target="post-{{ ratingPost.id }}-rating-popover-button"
+  title="Last votes"
+  triggers="hover"
+  placement="bottom"
+>
+  <div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+    {% for vote in ratingPost.votes | slice(0, limit) %}
+      <b-badge variant="{{ vote.value == -1 ? 'danger' : 'success' }}">
+        {{ vote.value }}
+      </b-badge>
+
+      <b>
+        {{ vote.user.username }}
+      </b>
+
+      <br>
+
+      {{ blogDate(vote.createdAt) }}
+      <hr class="my-0 py-0">
+    {% endfor %}
+    {% if ratingPost.votes | length > limit %}
+      And more ({{ ratingPost.votes | length - limit }} votes)...
+    {% endif %}
+  </div>
+</b-popover>

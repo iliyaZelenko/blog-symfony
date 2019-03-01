@@ -1,0 +1,49 @@
+{% extends 'layouts/main/index.html.twig' %}
+
+{% block title %}Posts{% endblock %}
+
+{% block content %}
+  <p>
+    Total posts: {{ totalPosts }}.
+  </p>
+
+  <b-container fluid>
+    <b-row align-h="center">
+      <b-col
+        sm="2"
+        class="text-right"
+      >
+        <label
+          for="perPageInput"
+          class="mt-1"
+        >
+          Per page:
+        </label>
+      </b-col>
+      <b-col sm="3">
+        <b-form-input
+          v-model="perPage"
+          id="perPageInput"
+          type="text"
+        />
+      </b-col>
+      <b-col sm="3">
+        <b-form-select
+          v-model="perPage"
+          :options="perPageItems"
+          class="mb-3"
+          @input="paginationChangePage(currentPage, arguments[0])"
+        />
+      </b-col>
+    </b-row>
+  </b-container>
+
+  <hr>
+
+  {% include 'blog/posts/parts/posts_list/posts_list_main.html.twig' %}
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {% include 'blog/posts/parts/posts_list/posts_list_js.html.twig' %}
+{% endblock %}

@@ -1,0 +1,7 @@
+{% for label, messages in app.flashes %}
+  {% for message in messages %}
+    <b-alert variant="{{ label }}" show>
+      {{ message }}
+    </b-alert>
+  {% endfor %}
+{% endfor %}

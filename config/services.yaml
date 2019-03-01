@@ -1,0 +1,110 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: 'en'
+    app.algolia.indexes:
+        # в будущем можно переименовать индексы (тут переименовывать значения)
+        posts: 'posts'
+        comments: 'comments'
+    app.mail.site_email: 'iliyazelenkog@gmail.com'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
+
+    # this config only applies to the services created by this file
+    _instanceof:
+        # services whose classes are instances of CustomInterface will be tagged automatically
+        App\Utils\Contracts\Notify\Notifiers\NotifierInterface:
+            tags: ['app.notifier']
+
+
+    #------- Packages services -------
+
+    GuzzleHttp\Client: ~
+    GuzzleHttp\ClientInterface: '@GuzzleHttp\Client'
+
+
+    #------- App services -------
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controllers\:
+        resource: '../src/Controllers'
+        tags: ['controller.service_arguments']
+
+
+    App\Controllers\RESTful\Auth\AuthController:
+        arguments:
+            $tokenTTL: '%lexik_jwt_authentication.token_ttl%'
+
+    App\Twig\AlgoliaExtension:
+        arguments:
+            $indexes: '%app.algolia.indexes%'
+            $indexPrefix: '%env(ALGOLIA_INDEX_PREFIX)%'
+
+    App\Utils\Recaptcha\Recaptcha:
+        arguments:
+            $secret: '%env(RECAPTCHA_SECRET)%'
+
+
+    App\Entity\Factories\PostVoteFactory: ~
+    App\Entity\Factories\CommentFactory: ~
+    App\Entity\Factories\UserFactory: ~
+    App\Utils\ContentGenerator\ContentGenerator: ~
+    App\Utils\Slugger\Slugger: ~
+    App\Utils\Notify\Notify: ~
+    App\Utils\Notify\NotifyNotificationsGenerator: ~
+    App\Utils\Notify\NotifyChain: ~
+    App\Utils\Mail\Mail:
+        arguments:
+            $siteEmail: '%app.mail.site_email%'
+
+
+    App\Entity\Factories\PostVoteFactoryInterface: '@App\Entity\Factories\PostVoteFactory'
+    App\Entity\Factories\CommentFactoryInterface: '@App\Entity\Factories\CommentFactory'
+    App\Entity\Factories\UserFactoryInterface: '@App\Entity\Factories\UserFactory'
+    App\Utils\Contracts\ContentGenerator\ContentGeneratorInterface: '@App\Utils\ContentGenerator\ContentGenerator'
+    App\Utils\Contracts\Slugger\SluggerInterface: '@App\Utils\Slugger\Slugger'
+    App\Utils\Contracts\Notify\NotifyInterface: '@App\Utils\Notify\Notify'
+    App\Utils\Contracts\Notify\NotifyNotificationsGeneratorInterface: '@App\Utils\Notify\NotifyNotificationsGenerator'
+    App\Utils\Contracts\Notify\NotifyChainInterface: '@App\Utils\Notify\NotifyChain'
+    App\Utils\Contracts\Mail\MailInterface: '@App\Utils\Mail\Mail'
+
+    #** EventListeners **
+
+    App\EventListeners\PostCreatedListener:
+        tags:
+            - { name: kernel.event_listener, event: post.created }
+
+    App\EventListeners\CommentCreatedListener:
+        tags:
+            - { name: kernel.event_listener, event: comment.created }
+
+    entities.setslug.listener:
+        class: App\EventListeners\EntitiesSetSlugListener
+        arguments:
+            - '@App\Utils\Contracts\Slugger\SluggerInterface'
+        tags:
+            # https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/events.html#lifecycle-events
+            - { name: doctrine.event_listener, event: prePersist } # postLoad
+
+    entities.created.updated.listener:
+        class: App\EventListeners\EntitiesCreatedUpdatedListener
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }

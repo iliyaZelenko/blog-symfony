@@ -1,0 +1,52 @@
+# OAuth
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect_41.xml"
+    prefix:   /connect
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect_41.xml"
+    prefix:   /connect
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login_41.xml"
+    prefix:   /login/hwi
+
+auth0_login:
+    path: /auth0/callback
+
+auth0_logout:
+    path: /auth0/logout
+
+# TODO не понятно зачем тут имя и нач то оно влияет
+site:
+    resource: 'routes/app/index.yaml'
+    prefix:
+        en: '/'
+        ru: '/ru'
+
+# Other
+routes:
+    path: /routes/
+    controller: App\Controllers\BlogController::routes
+
+# REST Auth
+api_login_check:
+  path: /api/login_check
+
+register:
+  path: /api/register
+  controller: App\Controllers\RESTful\Auth\AuthController::register
+  methods: POST
+
+signin:
+    path: /api/signin
+    controller: App\Controllers\RESTful\Auth\AuthController::signIn
+    methods: POST
+
+user:
+  path: /api/user
+  controller: App\Controllers\RESTful\Auth\AuthController::user
+
+api:
+  path: /api
+  controller: App\Controllers\RESTful\Auth\AuthController::api

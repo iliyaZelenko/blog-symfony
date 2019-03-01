@@ -1,0 +1,53 @@
+<b-btn id="post-{{ ratingPost.id }}-rating-popover-button" variant="primary">
+  Rating:
+
+  {% if ratingPost.votesValue > 3 %}
+    <b-badge variant="success">
+      {{ ratingPost.votesValue }}
+    </b-badge>
+  {% elseif ratingPost.votesValue < -3 %}
+    <b-badge variant="danger">
+      {{ ratingPost.votesValue }}
+    </b-badge>
+  {% else %}
+    <b-badge variant="light">
+      {{ ratingPost.votesValue }}
+    </b-badge>
+  {% endif %}
+</b-btn>
+
+{% if is_granted('IS_AUTHENTICATED_FULLY') and votingActivate is defined and votingActivate %}
+  <form
+    action="{{ path('post_do_vote', { id: ratingPost.id }) }}"
+    method="POST"
+    class="d-inline"
+  >
+    <input type="hidden" name="token" value="{{ csrf_token('user_vote') }}">
+    <input type="hidden" name="voteValue" value="+1">
+
+    <b-button
+      type="submit"
+      size="small"
+      variant="{% if not ratingPost.userVoteValue(app.user) is same as(1) %}outline-{% endif %}success"
+    >
+      👍🏻
+    </b-button>
+  </form>
+
+  <form
+    action="{{ path('post_do_vote', { id: ratingPost.id }) }}"
+    method="POST"
+    class="d-inline"
+  >
+    <input type="hidden" name="token" value="{{ csrf_token('user_vote') }}">
+    <input type="hidden" name="voteValue" value="-1">
+
+    <b-button
+      type="submit"
+      size="small"
+      variant="{% if not ratingPost.userVoteValue(app.user) is same as(-1) %}outline-{% endif %}danger"
+    >
+      👎🏻
+    </b-button>
+  </form>
+{% endif %}

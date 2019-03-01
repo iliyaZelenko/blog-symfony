@@ -1,0 +1,33 @@
+{% extends 'layouts/main/index.html.twig' %}
+
+{% block title %}
+  Profile page
+{% endblock %}
+
+{% block content %}
+  <h2 class="text-center">
+    My Posts
+  </h2>
+
+  <a href="{{ path('profile') }}">
+    Go back
+  </a>
+
+  <b-button
+    to="{{ path('post_creation') }}"
+    variant="primary"
+    class="ml-auto d-block"
+    style="width: max-content;"
+  >
+    Create a new post <b>+</b>
+  </b-button>
+
+  {% include 'blog/posts/parts/posts_list/posts_list_main.html.twig' %}
+
+{% endblock %}
+
+{% block javascripts %}
+  {{ parent() }}
+  {% include 'blog/posts/parts/posts_list/posts_list_js.html.twig' %}
+{% endblock %}
+

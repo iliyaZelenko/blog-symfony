@@ -1,0 +1,2 @@
+'hello_translated': 'Привет!'
+'{0} There are no apples|{1} There is one apple|]1,Inf[ There are %count% apples': '__{0} Здесь нет яблок|{1} Здесь одно яблоко|]1,Inf[ Здесь %count% яблок'

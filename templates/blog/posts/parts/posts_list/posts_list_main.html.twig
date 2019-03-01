@@ -1,0 +1,70 @@
+<b-pagination
+  v-model="currentPage"
+  :total-rows="{{ totalPosts }}"
+  :per-page="{{ perPage }}"
+  align="center"
+  class="mt-5"
+  @input="paginationChangePage"
+></b-pagination>
+
+<b-card-group
+  class="my-5"
+  columns
+>
+  {% for post in posts %}
+    <article>
+      <b-card no-body>
+        <b-link to="{{ path('post', { slug: post.slug, id: post.id }) }}" exact>
+          <b-card-img
+            src="https://picsum.photos/350/250?image={{ post.id }}"
+            alt="Image"
+            top
+          ></b-card-img>
+        </b-link>
+        <b-card-body>
+          <header>
+            <h3>
+              <b-link
+                to="{{ path('post', { slug: post.slug, id: post.id }) }}"
+                exact
+              >
+                {{ post.title }}
+              </b-link>
+              {#<b-link to="{{ postLink(post) }}" exact>{{ post.title }}</b-link>#}
+
+            </h3>
+          </header>
+          <p class="card-text">
+            <br>
+            {{ post.textShort | raw }}
+          </p>
+        </b-card-body>
+        <b-card-footer>
+          <div class="d-flex">
+            <div style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+              By
+              <b>
+                {{ post.author.username }}
+              </b>
+              <br>
+              {{ blogDate(post.createdAt()) }}
+            </div>
+            <div class="ml-auto">
+              {% include 'blog/posts/parts/rating_button.html.twig' with { ratingPost: post } only %}
+              {% include 'blog/posts/parts/rating_popover.html.twig' with { ratingPost: post } only %}
+            </div>
+          </div>
+        </b-card-footer>
+      </b-card>
+    </article>
+  {% endfor %}
+</b-card-group>
+
+<b-pagination
+  v-model="currentPage"
+  :total-rows="{{ totalPosts }}"
+  :per-page="{{ perPage }}"
+  align="center"
+  class="mb-5"
+  @input="paginationChangePage"
+></b-pagination>

@@ -1,0 +1,93 @@
+security:
+    encoders:
+        App\Entity\User:
+            # bcrypt or argon2i are recommended
+            # argon2i is more secure, but requires PHP 7.2 or the Sodium extension
+            algorithm: bcrypt
+            cost: 12
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+#      in_memory: { memory: ~ }
+      # добавил это и закомментировал in_memory
+        entity_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+        # требуется для работы HWIOAuthBundle, но если больше одного провайлера, то будет ошибка
+        # также без entity_provider будет ошибка App\Entity\User. Видел тут использовали FOSUserBundle provider
+#        hwi:
+#            id: hwi_oauth.user.provider
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        login:
+            pattern: ^/api/auth/signin
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path: /api/auth/signin/token
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        register:
+            pattern:  ^/api/register
+            stateless: true
+            anonymous: true
+
+        api:
+            pattern: ^/api
+            stateless: true
+            guard:
+                authenticators:
+                - lexik_jwt_authentication.jwt_token_authenticator
+
+        main:
+            anonymous: true
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                # редиректит на страницу входа, чтобы, например, войти под другим аккаунтом
+                target: app_login
+#
+            oauth:
+                resource_owners:
+                    auth0: /auth0/callback
+#                    google:             "/login/check-google"
+#                    my_custom_provider: "/login/check-custom"
+#                    my_github:          "/login/check-github"
+                login_path: /login
+                use_forward: false
+                failure_path: /login
+
+                oauth_user_provider:
+                    # hwi_oauth.authentication.provider.oauth.main
+                    # hwi_oauth.user.provider.entity # hwi_oauth.resource_ownermap.main
+                    # хотел указать тут свой провайдер entity_provider,
+                    service: hwi_oauth.user.provider
+
+            # activate different ways to authenticate
+
+            # http_basic: true
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: true
+            # https://symfony.com/doc/current/security/form_login_setup.html
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/profile, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/auth/signin, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/auth/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/user, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }

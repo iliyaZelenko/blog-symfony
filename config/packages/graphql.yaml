@@ -1,0 +1,16 @@
+overblog_graphql:
+  definitions:
+      schema:
+          # мои root объекты
+          query: Query
+          mutation: Mutation
+          # ресольверы
+          resolver_maps:
+              - App\GraphQL\Resolver\MyResolverMap
+      mappings:
+          auto_discover: false
+          types:
+              -
+                  type: graphql
+                  dir: "%kernel.project_dir%/config/graphql/types"
+                  suffix: ~

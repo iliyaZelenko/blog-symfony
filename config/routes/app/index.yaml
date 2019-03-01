@@ -1,0 +1,60 @@
+# Profile
+profile:
+    resource: 'profile/index.yaml'
+    prefix: 'profile'
+
+# Main routes
+index:
+    path: /
+    controller: App\Controllers\HomeController::index
+    methods: [GET]
+
+blog:
+    path: /blog/{page}
+    controller: App\Controllers\PostsController::allPosts
+    requirements:
+        page: '\d+'
+    defaults:
+        page: 1
+    methods: [GET]
+
+post:
+    path: /post/{id}/{slug}
+    controller: App\Controllers\PostsController::post
+    requirements:
+        slug: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+        id:  '\d+'
+    methods: [GET]
+
+post_create_comment:
+    path: /post/{id}/{slug}/new-comment/
+    controller: App\Controllers\PostsController::createComment
+    methods: [POST]
+
+post_creation:
+    path: /post-creation/
+    controller: App\Controllers\PostsController::createPost
+    methods: [POST, GET]
+
+post_do_vote:
+    path: /post/{id}/do-vote/
+    controller: App\Controllers\PostsController::postDoVote
+    methods: [POST]
+
+search:
+    path: /search
+    controller: App\Controllers\SearchController::postSearch
+    methods: [GET]
+
+# Auth
+app_logout:
+    path: /logout
+    methods: [POST]
+
+app_login:
+    path: /login
+    controller: App\Controllers\AuthController::login
+
+app_register:
+    path: /register
+    controller: App\Controllers\AuthController::register

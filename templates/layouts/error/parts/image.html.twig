@@ -1,0 +1,19 @@
+<div style="
+  background: url('/md_oops.png');
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background-position: center;
+  background-size: cover;
+">
+  <h1 style="margin-bottom: 50px; color: red;">
+    {% if status_code >= 500 %}
+      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        We apologize, {{ app.user.username }}!
+      {% else %}
+        We apologize!
+      {% endif %}
+    {% endif %}
+  </h1>
+</div>
