@@ -1,5 +1,3 @@
-./bin/phpunit
-
 # this checks that the source code follows the Symfony Code Syntax rules
 '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || ./vendor/bin/php-cs-fixer fix --diff --dry-run -v'
 
