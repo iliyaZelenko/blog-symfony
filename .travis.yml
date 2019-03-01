@@ -34,10 +34,10 @@ before_install:
   - composer self-update
   # Yarn
   # Repo for Yarn
-  - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
-  - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  - sudo apt-get update -qq
-  - sudo apt-get install -y -qq yarn=1.13.0-1
+#  - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
+#  - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+#  - sudo apt-get update -qq
+#  - sudo apt-get install -y -qq yarn=1.13.0-1
 #    - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version version-number
 #    - export PATH="$HOME/.yarn/bin:$PATH"
 
@@ -61,6 +61,7 @@ install:
 #    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
 #    - sudo service apache2 restart
 
+# order of stages
 stages:
   - lint
   - tests
@@ -73,20 +74,7 @@ jobs:
   include:
     - stage: lint
       name: "Lint"
-      script: ./bin/console lint:yaml config
-#        - |
-#        # this checks that the source code follows the Symfony Code Syntax rules
-#        '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || ./vendor/bin/php-cs-fixer fix --diff --dry-run -v'
-#        # this checks that the YAML config files contain no syntax errors
-#        ./bin/console lint:yaml config
-#        # this checks that the Twig template files contain no syntax errors
-#        ./bin/console lint:twig templates
-#        # this checks that the XLIFF translations contain no syntax errors
-#        ./bin/console lint:xliff translations
-#        # this checks that the application doesn't use dependencies with known security vulnerabilities
-#        ./bin/console security:check
-#        # this checks that Doctrine's mapping configurations are valid
-#        ./bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
+      script: ./travis/lint.sh
 
     - stage: tests
       name: "Unit Tests"
@@ -101,5 +89,5 @@ jobs:
         skip_cleanup: true
         # npx TODO возможно вообще убрать yarn
         script:
-          - yarn semantic-release
+          - npx semantic-release
 
