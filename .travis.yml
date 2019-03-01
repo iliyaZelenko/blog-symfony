@@ -1,5 +1,7 @@
 language: php # node_js
 sudo: required # false
+php:
+  - 7.1.9
 
 #node_js:
 #    - 8
