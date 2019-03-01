@@ -43,7 +43,7 @@ before_install:
 
 install:
   - composer install
-  - ./bin/phpunit install
+#  - ./bin/phpunit install
 
 # php-fpm for integration tests: https://docs.travis-ci.com/user/languages/php/#apache--php
 #before_script:
