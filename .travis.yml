@@ -29,6 +29,9 @@ matrix:
   allow_failures:
     - php: nightly
 
+before_deploy:
+    - yarn
+
 before_install:
   - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
   - composer self-update
@@ -89,5 +92,5 @@ jobs:
         skip_cleanup: true
         # npx TODO возможно вообще убрать yarn
         script:
-          - npx semantic-release
+          - yarn semantic-release
 
