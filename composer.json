@@ -77,6 +77,7 @@
         "symfony/polyfill-php56": "*"
     },
     "scripts": {
+        "test:unit": "@php ./bin/phpunit",
         "c": "@php ./bin/console",
         "serve": "@php ./bin/console server:run 8080",
         "dump": "@php ./bin/console server:dump",

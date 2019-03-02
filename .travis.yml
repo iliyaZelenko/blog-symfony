@@ -26,7 +26,8 @@ matrix:
     - php: nightly
 
 before_deploy:
-    - yarn
+  # js зависимости нужны только для деплоя (точнее только пакет semantic-release)
+  - yarn
 
 before_install:
   - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
@@ -51,7 +52,6 @@ jobs:
     - stage: lint
       name: "Lint"
       script: ./travis/lint.sh
-
     - stage: tests
       name: "Unit Tests"
       script: ./bin/phpunit
