@@ -22,7 +22,12 @@
 
     <filter>
         <whitelist>
-            <directory>src</directory>
+            <directory>src/</directory>
+            <exclude>
+              <directory>./src/Migrations/</directory>
+              <file>src/.bootstrap.php</file>
+              <file>src/Kernel.php</file>
+            </exclude>
         </whitelist>
     </filter>
 
