@@ -1,11 +1,17 @@
+# Required to run your project under the correct environment.
 language: php # node_js
-sudo: required # false
+# false - Allows use container-based infrastructure
+sudo: required
+
+# Versions of PHP you want your project run with.
 php:
   - 7.1.9
+#  - 7.2
 
 cache:
   yarn: true
   directories:
+    # Cache composer packages so "composer install" is faster
     - $HOME/.composer/cache/files
     - ./bin/.phpunit
     - node_modules
@@ -14,8 +20,10 @@ env:
   global:
     - SYMFONY_PHPUNIT_DIR=./bin/.phpunit
     - SYMFONY_DEPRECATIONS_HELPER=29
+    - DB=mysql
 
 matrix:
+  # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
   fast_finish: true
   include:
     # - php: 7.1.18
@@ -25,15 +33,37 @@ matrix:
   allow_failures:
     - php: nightly
 
+before_script:
+  # Apache https://docs.travis-ci.com/user/languages/php/#apache--php
+  - sudo apt-get update
+  - sudo apt-get install apache2 libapache2-mod-fastcgi
+  # enable php-fpm
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - sudo a2enmod rewrite actions fastcgi alias
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
+  - sudo chown -R travis:travis /var/lib/apache2/fastcgi
+  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  # configure apache virtual hosts
+  - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/000-default.conf
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
+  - sudo service apache2 restart
+
 before_deploy:
-    - yarn
+  # js зависимости нужны только для деплоя (точнее только пакет semantic-release)
+  - yarn
 
 before_install:
   - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
   - composer self-update
 
 install:
-  - composer install
+  # Install composer dependencies
+  - composer install --no-interaction
+  # Create database, schema and fixtures
+  - php bin/console doctrine:database:create --env=test
+  - php bin/console doctrine:schema:create --env=test
+  - php bin/console doctrine:fixtures:load -n --env=test
 #  - ./bin/phpunit install
 
 
@@ -51,7 +81,6 @@ jobs:
     - stage: lint
       name: "Lint"
       script: ./travis/lint.sh
-
     - stage: tests
       name: "Unit Tests"
       script: ./bin/phpunit
