@@ -93,6 +93,7 @@ stages:
   - lint
   - tests
   - release
+  - coverage
 #    - name: release
 #        # это не обязательно
 #        if: branch = next
@@ -102,9 +103,15 @@ jobs:
     - stage: lint
       name: "Lint"
       script: ./travis/lint.sh
+
     - stage: tests
       name: "Unit Tests"
-      script: ./bin/phpunit
+      script: ./bin/phpunit && phpunit --coverage-clover=coverage.xml
+
+    - stage: coverage
+      name: "Send to Codecov"
+      script: "bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
+
     # Define the release stage that runs semantic-release
     - stage: release
       node_js: lts/*
