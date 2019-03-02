@@ -1,5 +1,5 @@
+/coverage.xml
 /.php_cs.cache
-# странно что по дефолту не в игноре
 /.env
 /dump.html
 /node_modules/
