@@ -106,7 +106,7 @@ jobs:
 
     - stage: tests
       name: "Unit Tests"
-      script: ./bin/phpunit && phpunit --coverage-clover=coverage.xml
+      script: ./bin/phpunit && ./bin/phpunit --coverage-clover=coverage.xml
 
     - stage: coverage
       name: "Send to Codecov"
@@ -122,7 +122,7 @@ jobs:
         provider: script
         skip_cleanup: true
         on:
-          branch: next
+          branch: prod
         script:
           - yarn semantic-release
 
