@@ -4,6 +4,9 @@ namespace App\Utils\Slugger;
 
 use App\Utils\Contracts\Slugger\SluggerInterface;
 
+// Это приложение использует Slugger по интерфейсу SluggerInterface, понимаю что можно было сразу использовать
+// \Cocur\Slugify\SlugifyInterface, но если я захочу поменять реализацию Slugger, то смогу просто поменять этот класс
+// Может для простого слугера это лишнее, но я хотел протестировать такой класс.
 class Slugger implements SluggerInterface
 {
     /**
@@ -11,15 +14,15 @@ class Slugger implements SluggerInterface
      *
      * @var \Cocur\Slugify\SlugifyInterface
      */
-    private $slugify;
+    private $sluggerProcessor;
 
-    public function __construct(\Cocur\Slugify\SlugifyInterface $slugify)
+    public function __construct(\Cocur\Slugify\SlugifyInterface $sluggerProcessor)
     {
-        $this->slugify = $slugify;
+        $this->sluggerProcessor = $sluggerProcessor;
     }
 
     public function slugify($str): string
     {
-        return $this->slugify->slugify($str);
+        return $this->sluggerProcessor->slugify($str);
     }
 }

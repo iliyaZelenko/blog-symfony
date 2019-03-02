@@ -11,22 +11,6 @@ class HomeController extends AbstractController
 {
     public function index(TranslatorInterface $translator): Response
     {
-//        dump([
-//            'Debug data' => 'this package is awesome',
-//            'Nested array' => [
-//                [123],
-//                'key' => 'value',
-//                'user' => [
-//                    'name' => 'Ilya',
-//                    'age' => 18
-//                ]
-//            ],
-//            'Current date-time' => date('Y-m-d H:i:s'),
-//            'Class' => new JsonResponse([
-//                'my json response'
-//            ], Response::HTTP_OK)
-//        ]);
-
         return $this->render('blog/main_page.html.twig', [
             'hello_translated' => $translator->trans('hello_translated'),
             'count' => 1
