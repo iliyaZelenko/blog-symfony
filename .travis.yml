@@ -78,7 +78,7 @@ before_install:
 
 install:
   # Install Apache web server and FastCGI module ...
-  - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
+#  - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
   # Install composer dependencies
   - composer install --no-interaction
   # Create database, schema and fixtures
@@ -91,7 +91,7 @@ install:
 # order of stages
 stages:
   - lint_and_tests_and_coverage
-  - send_coverage
+#  - send_coverage
   - release
 #    - name: release
 #        # это не обязательно
@@ -104,16 +104,12 @@ jobs:
       script: ./travis/lint.sh
 
     - stage: lint_and_tests_and_coverage
-      name: "Unit Tests"
-      script: ./bin/phpunit
-      
-    - stage: lint_and_tests_and_coverage
-      name: "Generate coverage"
-      script: ./bin/phpunit && ./bin/phpunit --coverage-clover=coverage.xml
+      name: "Unit Tests and Generate Coverage"
+      script: ./bin/phpunit --coverage-clover=coverage.xml && bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
 
-    - stage: send_coverage
-      name: "Send to Codecov"
-      script: "bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
+#    - stage: send_coverage
+#      name: "Send to Codecov"
+#      script: "bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
 
     # Define the release stage that runs semantic-release
     - stage: release
