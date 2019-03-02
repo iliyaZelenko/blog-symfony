@@ -17,6 +17,9 @@
     "clue/stream-filter": {
         "version": "v1.4.0"
     },
+    "cocur/slugify": {
+        "version": "v3.2"
+    },
     "composer/semver": {
         "version": "1.4.2"
     },
