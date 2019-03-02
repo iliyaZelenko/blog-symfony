@@ -114,6 +114,8 @@ jobs:
       deploy:
         provider: script
         skip_cleanup: true
+        on:
+          branch: next
         script:
           - yarn semantic-release
 
