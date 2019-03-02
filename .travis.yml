@@ -73,12 +73,12 @@ before_deploy:
   - yarn
 
 before_install:
-  - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
+#  - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
   - composer self-update
 
 install:
   # Install Apache web server and FastCGI module ...
-  - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
+#  - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
   # Install composer dependencies
   - composer install --no-interaction
   # Create database, schema and fixtures
@@ -90,23 +90,29 @@ install:
 
 # order of stages
 stages:
-  - lint
-  - tests
-  - release
+  - Lint, Tests and Coverage
+#  - send_coverage
+  - Release
 #    - name: release
 #        # это не обязательно
 #        if: branch = next
 
 jobs:
   include:
-    - stage: lint
-      name: "Lint"
-      script: ./travis/lint.sh
-    - stage: tests
-      name: "Unit Tests"
-      script: ./bin/phpunit
+    - stage: Lint, Tests and Coverage
+      name: 'Lint'
+      script: './travis/lint.sh'
+
+    - stage: Lint, Tests and Coverage
+      name: 'Unit Tests and Generate Coverage'
+      script: './bin/phpunit --coverage-clover=coverage.xml && bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN'
+
+#    - stage: send_coverage
+#      name: "Send to Codecov"
+#      script: "bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
+
     # Define the release stage that runs semantic-release
-    - stage: release
+    - stage: Release
       node_js: lts/*
       # Advanced: optionally overwrite your default `script` step to skip the tests
       # script: skip
@@ -114,6 +120,8 @@ jobs:
       deploy:
         provider: script
         skip_cleanup: true
+        on:
+          branch: prod
         script:
-          - yarn semantic-release
+          - 'yarn semantic-release'
 
