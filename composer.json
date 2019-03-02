@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "algolia/search-bundle": "^3.4",
+        "cocur/slugify": "^3.2",
         "doctrine/annotations": "^1.6",
         "guzzlehttp/guzzle": "^6.3",
         "hwi/oauth-bundle": "^0.6.3",
