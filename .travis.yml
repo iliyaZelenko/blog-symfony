@@ -100,11 +100,11 @@ stages:
 jobs:
   include:
     - stage: Lint, Tests and Coverage
-      name: Lint
+      name: 'Lint'
       script: './travis/lint.sh'
 
     - stage: Lint, Tests and Coverage
-      name: Unit Tests and Generate Coverage
+      name: 'Unit Tests and Generate Coverage'
       script: './bin/phpunit --coverage-clover=coverage.xml && bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN'
 
 #    - stage: send_coverage
