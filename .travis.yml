@@ -73,7 +73,7 @@ before_deploy:
   - yarn
 
 before_install:
-  - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
+#  - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
   - composer self-update
 
 install:
@@ -90,29 +90,29 @@ install:
 
 # order of stages
 stages:
-  - lint_and_tests_and_coverage
+  - Lint, Tests and Coverage
 #  - send_coverage
-  - release
+  - Release
 #    - name: release
 #        # это не обязательно
 #        if: branch = next
 
 jobs:
   include:
-    - stage: lint_and_tests_and_coverage
-      name: "Lint"
-      script: ./travis/lint.sh
+    - stage: Lint, Tests and Coverage
+      name: Lint
+      script: './travis/lint.sh'
 
-    - stage: lint_and_tests_and_coverage
-      name: "Unit Tests and Generate Coverage"
-      script: ./bin/phpunit --coverage-clover=coverage.xml && bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
+    - stage: Lint, Tests and Coverage
+      name: Unit Tests and Generate Coverage
+      script: './bin/phpunit --coverage-clover=coverage.xml && bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN'
 
 #    - stage: send_coverage
 #      name: "Send to Codecov"
 #      script: "bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
 
     # Define the release stage that runs semantic-release
-    - stage: release
+    - stage: Release
       node_js: lts/*
       # Advanced: optionally overwrite your default `script` step to skip the tests
       # script: skip
@@ -123,5 +123,5 @@ jobs:
         on:
           branch: prod
         script:
-          - yarn semantic-release
+          - 'yarn semantic-release'
 
