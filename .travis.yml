@@ -21,9 +21,9 @@ env:
     - SYMFONY_PHPUNIT_DIR=./bin/.phpunit
     - SYMFONY_DEPRECATIONS_HELPER=29
     - DB=mysql
-    - VHOST_FILE=travis/.travis.vhost
-    - VHOST_CONF=travis.conf
-    - VHOST_URL=travis.dev
+#    - VHOST_FILE=travis/.travis.vhost
+#    - VHOST_CONF=travis.conf
+#    - VHOST_URL=travis.dev
 
 matrix:
   # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
@@ -51,21 +51,22 @@ before_script:
 #  - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/000-default.conf
 #  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
 #  - sudo service apache2 restart
+
   # Enable PHP-FPM and FastCGI ...
-  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-  - sudo a2enmod rewrite actions fastcgi alias
-  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-  # Disable Xdebug ...
-  - phpenv config-rm xdebug.ini
-  # Configure application's virtual host ...
-  - sudo cp -f $VHOST_FILE /etc/apache2/sites-available/$VHOST_CONF
-  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/$VHOST_CONF
-  - sudo sed -e "s?%VHOST_URL%?$VHOST_URL?g" --in-place /etc/apache2/sites-available/$VHOST_CONF
-  - echo "127.0.0.1       $VHOST_URL" | sudo tee -a /etc/hosts
-  - sudo a2enmod rewrite
-  - sudo a2ensite $VHOST_CONF
-  - sudo service apache2 restart
+#  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+#  - sudo a2enmod rewrite actions fastcgi alias
+#  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+#  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+#  # Disable Xdebug ...
+#  - phpenv config-rm xdebug.ini
+#  # Configure application's virtual host ...
+#  - sudo cp -f $VHOST_FILE /etc/apache2/sites-available/$VHOST_CONF
+#  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/$VHOST_CONF
+#  - sudo sed -e "s?%VHOST_URL%?$VHOST_URL?g" --in-place /etc/apache2/sites-available/$VHOST_CONF
+#  - echo "127.0.0.1       $VHOST_URL" | sudo tee -a /etc/hosts
+#  - sudo a2enmod rewrite
+#  - sudo a2ensite $VHOST_CONF
+#  - sudo service apache2 restart
 
 before_deploy:
   # js зависимости нужны только для деплоя (точнее только пакет semantic-release)
@@ -81,9 +82,9 @@ install:
   # Install composer dependencies
   - composer install --no-interaction
   # Create database, schema and fixtures
-  - php bin/console doctrine:database:create --env=test
-  - php bin/console doctrine:schema:create --env=test
-  - php bin/console doctrine:fixtures:load -n --env=test
+#  - php bin/console doctrine:database:create --env=test
+#  - php bin/console doctrine:schema:create --env=test
+#  - php bin/console doctrine:fixtures:load -n --env=test
 #  - ./bin/phpunit install
 
 
