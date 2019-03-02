@@ -1,4 +1,6 @@
 {
+  "name": "symfony-blog-iz",
+  "version": "1.0.0",
   "license": "MIT",
   "browserslist": [
     "last 1 version",
