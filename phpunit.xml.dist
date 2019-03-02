@@ -1,128 +1,36 @@
-# Required to run your project under the correct environment.
-language: php # node_js
-# false - Allows use container-based infrastructure
-sudo: required
+<?xml version="1.0" encoding="UTF-8"?>
 
-# Versions of PHP you want your project run with.
-php:
-  - 7.1.9
-#  - 7.2
+<!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.5/phpunit.xsd"
+  backupGlobals="false"
+  colors="true"
+  bootstrap="src/.bootstrap.php"
+>
+    <php>
+        <ini name="error_reporting" value="-1" />
+        <env name="APP_ENV" value="test" />
+        <env name="SHELL_VERBOSITY" value="-1" />
+    </php>
 
-cache:
-  yarn: true
-  directories:
-    # Cache composer packages so "composer install" is faster
-    - $HOME/.composer/cache/files
-    - ./bin/.phpunit
-    - node_modules
+    <testsuites>
+        <testsuite name="Project Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
 
-env:
-  global:
-    - SYMFONY_PHPUNIT_DIR=./bin/.phpunit
-    - SYMFONY_DEPRECATIONS_HELPER=29
-    - DB=mysql
-#    - VHOST_FILE=travis/.travis.vhost
-#    - VHOST_CONF=travis.conf
-#    - VHOST_URL=travis.dev
+    <filter>
+        <whitelist>
+            <directory>src</directory>
+        </whitelist>
+    </filter>
 
-matrix:
-  # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
-  fast_finish: true
-  include:
-    # - php: 7.1.18
-    - php: 7.2
-    #- php: 7.3
-    - php: nightly
-  allow_failures:
-    - php: nightly
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
 
-before_script:
-  # Apache https://docs.travis-ci.com/user/languages/php/#apache--php
-#  - sudo apt-get update
-#  - sudo apt-get install apache2 libapache2-mod-fastcgi
-#  # enable php-fpm
-#  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-#  - sudo a2enmod rewrite actions fastcgi alias
-#  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-#  - sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
-#  - sudo chown -R travis:travis /var/lib/apache2/fastcgi
-#  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-#  # configure apache virtual hosts
-#  - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/000-default.conf
-#  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
-#  - sudo service apache2 restart
-
-  # Enable PHP-FPM and FastCGI ...
-#  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-#  - sudo a2enmod rewrite actions fastcgi alias
-#  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-#  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-#  # Disable Xdebug ...
-#  - phpenv config-rm xdebug.ini
-#  # Configure application's virtual host ...
-#  - sudo cp -f $VHOST_FILE /etc/apache2/sites-available/$VHOST_CONF
-#  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/$VHOST_CONF
-#  - sudo sed -e "s?%VHOST_URL%?$VHOST_URL?g" --in-place /etc/apache2/sites-available/$VHOST_CONF
-#  - echo "127.0.0.1       $VHOST_URL" | sudo tee -a /etc/hosts
-#  - sudo a2enmod rewrite
-#  - sudo a2ensite $VHOST_CONF
-#  - sudo service apache2 restart
-
-before_deploy:
-  # js зависимости нужны только для деплоя (точнее только пакет semantic-release)
-  - yarn
-
-before_install:
-  - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
-  - composer self-update
-
-install:
-  # Install Apache web server and FastCGI module ...
-  - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
-  # Install composer dependencies
-  - composer install --no-interaction
-  # Create database, schema and fixtures
-#  - php bin/console doctrine:database:create --env=test
-#  - php bin/console doctrine:schema:create --env=test
-#  - php bin/console doctrine:fixtures:load -n --env=test
-#  - ./bin/phpunit install
-
-
-# order of stages
-stages:
-  - lint
-  - tests
-  - release
-  - coverage
-#    - name: release
-#        # это не обязательно
-#        if: branch = next
-
-jobs:
-  include:
-    - stage: lint
-      name: "Lint"
-      script: ./travis/lint.sh
-
-    - stage: tests
-      name: "Unit Tests"
-      script: ./bin/phpunit && phpunit --coverage-clover=coverage.xml
-
-    - stage: coverage
-      name: "Send to Codecov"
-      script: "bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
-
-    # Define the release stage that runs semantic-release
-    - stage: release
-      node_js: lts/*
-      # Advanced: optionally overwrite your default `script` step to skip the tests
-      # script: skip
-      # semantic-release: https://github.com/semantic-release/semantic-release/blob/master/docs/recipes/travis.md#using-semantic-release-with-travis-ci
-      deploy:
-        provider: script
-        skip_cleanup: true
-        on:
-          branch: prod
-        script:
-          - yarn semantic-release
-
+    <logging>
+        <log type="coverage-clover" target="clover.xml"/>
+    </logging>
+</phpunit>
