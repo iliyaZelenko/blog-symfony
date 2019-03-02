@@ -187,6 +187,7 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
 //        );
 
         $sum = array_sum(
+            // не помешал был pluck метод как в Laravel
             array_map(function (PostVote $vote) {
                 return $vote->getValue();
             }, $this->votes->toArray())

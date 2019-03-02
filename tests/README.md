@@ -34,7 +34,8 @@ Dummy — объект который ничего не делает и не в�
 $stub = $this->createMock(SomeClass::class);
 $stub->method('getSomething')
     ->willReturn('foo');
-
+    
+// SUT - System Under Test
 $sut->action($stub);
 ```
 
@@ -55,6 +56,5 @@ $sut->action($mock);
 ```php
 $dummy = $this->createMock(SomeClass::class);
 
-// SUT - System Under Test
 $sut->action($dummy);
 ```
