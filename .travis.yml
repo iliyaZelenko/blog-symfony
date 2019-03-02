@@ -90,25 +90,28 @@ install:
 
 # order of stages
 stages:
-  - lint
-  - tests
+  - lint_and_tests_and_coverage
+  - send_coverage
   - release
-  - coverage
 #    - name: release
 #        # это не обязательно
 #        if: branch = next
 
 jobs:
   include:
-    - stage: lint
+    - stage: lint_and_tests_and_coverage
       name: "Lint"
       script: ./travis/lint.sh
 
-    - stage: tests
+    - stage: lint_and_tests_and_coverage
       name: "Unit Tests"
+      script: ./bin/phpunit
+      
+    - stage: lint_and_tests_and_coverage
+      name: "Generate coverage"
       script: ./bin/phpunit && ./bin/phpunit --coverage-clover=coverage.xml
 
-    - stage: coverage
+    - stage: send_coverage
       name: "Send to Codecov"
       script: "bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN"
 
