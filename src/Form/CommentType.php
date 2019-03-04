@@ -18,14 +18,12 @@ class CommentType extends AbstractType
 //            ->add('user', TextType::class, ['label' => 'Nickname'])
 //            ->add('email', EmailType::class, ['label' => 'Email'])
             ->add('text', TextType::class, ['label' => 'Message'])
-            ->add('save', SubmitType::class, ['label' => 'Submit'])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Comment::class,
         ]);
     }
 }
