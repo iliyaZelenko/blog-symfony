@@ -19,8 +19,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Post implements SluggableInterface, CreatedUpdatedInterface
 {
-    use CreatedUpdatedTrait;
-
     /* Columns */
 
     /**
