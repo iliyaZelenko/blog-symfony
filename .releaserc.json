@@ -6,7 +6,6 @@
     ["@semantic-release/github", {
       "assets": ["dist/**"]
     }],
-    "@semantic-release/git",
-    "@semantic-release/npm"
+    "@semantic-release/git"
   ]
 }
