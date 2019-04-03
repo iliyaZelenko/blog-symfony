@@ -14,8 +14,6 @@ class PostVote implements CreatedUpdatedInterface
 {
     use CreatedUpdatedTrait;
 
-    /* Columns */
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -29,8 +27,6 @@ class PostVote implements CreatedUpdatedInterface
      * @ORM\Column(type="integer")
      */
     private $value;
-
-    /* Relations */
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")

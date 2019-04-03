@@ -15,8 +15,6 @@ class User implements UserInterface
 {
     use CreatedUpdatedTrait;
 
-    /* Columns */
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -34,7 +32,6 @@ class User implements UserInterface
      */
     private $password;
 
-    // TODO походу важно указывать name="..." если в другом регистре
     /**
      * @ORM\Column(name="is_active", type="boolean")
      */

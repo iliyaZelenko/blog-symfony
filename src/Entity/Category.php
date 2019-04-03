@@ -5,9 +5,6 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-// TODO @Gedmo\Tree(type="materializedPath")
-// @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
-
 /**
  * @Gedmo\Tree(type="nested")
  *
@@ -48,20 +45,20 @@ class Category
 
     /**
      * @Gedmo\TreeRoot()
-     * @ORM\ManyToOne(targetEntity="Category")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
     private $root;
 
     /**
      * @Gedmo\TreeParent()
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="children")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
     private $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="parent", orphanRemoval=true)
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     private $children;
@@ -95,53 +92,4 @@ class Category
     {
         return $this->parent;
     }
-
-// Это не помогло
-//    /**
-//     * @return mixed
-//     */
-//    public function getLft()
-//    {
-//        return $this->lft;
-//    }
-//
-//    /**
-//     * @param mixed $lft
-//     */
-//    public function setLft($lft): void
-//    {
-//        $this->lft = $lft;
-//    }
-//
-//    /**
-//     * @return mixed
-//     */
-//    public function getRgt()
-//    {
-//        return $this->rgt;
-//    }
-//
-//    /**
-//     * @param mixed $rgt
-//     */
-//    public function setRgt($rgt): void
-//    {
-//        $this->rgt = $rgt;
-//    }
-//
-//    /**
-//     * @return mixed
-//     */
-//    public function getDepth()
-//    {
-//        return $this->depth;
-//    }
-//
-//    /**
-//     * @param mixed $depth
-//     */
-//    public function setDepth($depth): void
-//    {
-//        $this->depth = $depth;
-//    }
 }

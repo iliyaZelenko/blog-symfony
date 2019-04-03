@@ -22,6 +22,7 @@
     "sass-loader": "^7.1.0",
     "semantic-release": "^15.13.3",
     "symfony-cli-make": "^1.0.3",
+    "symfony-entity-analyzer": "^1.0.0",
     "symfony-server-dump-live": "^1.0.0",
     "symfony-var-dumper-browser": "^1.0.1",
     "ts-loader": "^5.3.1",

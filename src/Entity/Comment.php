@@ -17,8 +17,6 @@ class Comment implements CreatedUpdatedInterface
 {
     use CreatedUpdatedTrait;
 
-    /* Columns */
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -31,16 +29,12 @@ class Comment implements CreatedUpdatedInterface
      */
     private $text;
 
-    /* Relations */
-
-    //, inversedBy="comments"
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Post")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $post;
 
-    //, inversedBy="comments"
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")

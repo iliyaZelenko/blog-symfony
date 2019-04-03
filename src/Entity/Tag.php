@@ -14,8 +14,6 @@ class Tag implements CreatedUpdatedInterface
 {
     use CreatedUpdatedTrait;
 
-    /* Columns */
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

@@ -21,8 +21,6 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
 {
     use CreatedUpdatedTrait;
 
-    /* Columns */
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -45,28 +43,13 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
      */
     private $textShort;
 
-    // было unique=true, но пост ищется по id, поэтому конфликта не будет, ничего страшного думаю не будет
-    // если одинаковый слуг, он же относится к контенту, не нужно будет делать проверку уникальнсоти слугов и для
-    // сохранения уникальности добавлять число на конец слуга, которое только будет мешать seo(не относится к заголовку)
-    // Например, допустим посты начали писать разные пользователи, один сделал пост со слугом "kak-rabotat-s-symfony-4"
-    // (Как работать с Symfony 4), потом второй сделал такой же заголовок, но слуг уже будет "kak-rabotat-s-symfony-42"
-    // (добавилось 2 для уникальности слуга), получилось что версия не 4, а 42, как по мне, это меняет смысл поста,
-    // из-за чего плохо для сео.
     /**
      * @ORM\Column(name="slug", type="string", length=255)
      */
     private $slug;
 
-    /* Relations */
-
-//    /**
-//     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post", orphanRemoval=true)
-//     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
-//     */
-//    private $comments;
-
     /**
-     * @ORM\ManyToMany(targetEntity="Tag")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tag")
      * @ORM\JoinTable(
      *   name="post_tag",
      *   joinColumns={
@@ -79,7 +62,6 @@ class Post implements SluggableInterface, CreatedUpdatedInterface
      */
     private $tags;
 
-    //, inversedBy="posts"
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
